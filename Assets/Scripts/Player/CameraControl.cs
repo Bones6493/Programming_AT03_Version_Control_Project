@@ -16,6 +16,15 @@ namespace Player
         // Limits vertical rotation
         [SerializeField] Vector2 _verticalRotationClamp = new Vector2(-60, 60);
 
+        [Header("Camera Transition Settings")]
+        public float transitionSpeed = 5;
+
+        [Header("Zoom Settings")]
+        [SerializeField] float minZoom = 0f;
+        [SerializeField] float maxZoom = 5f;
+        [SerializeField] float zoomSpeed = 2f;
+        private float currentZoom = 0f;
+
         [Header("Cammera Setup")]
         // Reference to the player object (horizontal)
         [SerializeField] Transform _player;
@@ -25,8 +34,12 @@ namespace Player
         [SerializeField] float _tempRotation;
         // Final vertical rotation value
         [SerializeField] float _verticalRotatoin;
+        public Transform firstPersonSnap;
+        public Transform thirdPersonSnap;
+        public Transform thirdPersonParent;
         void Update()
         {
+            HnadleZoom();
             // READ mouse x input ROATA player on y-axis using (Mouse X * sensitivity)
             _player.Rotate(0, Input.GetAxis("Mouse X") * sensitivity, 0);
             // READ mouse Y input ADD(Mouse Y * sesitivity) to temporary rotation value
@@ -49,7 +62,27 @@ namespace Player
             // ENDIF
 
             // APPLY vertical rotation to the camera's local X - axis
-            _camera.localEulerAngles = new Vector3(_verticalRotatoin, 0, 0);
+            // _camera.localEulerAngles = new Vector3(_verticalRotatoin, 0, 0);
+            firstPersonSnap.localEulerAngles = new Vector3(_verticalRotatoin, 0, 0);
+            thirdPersonParent.localEulerAngles = new Vector3(_verticalRotatoin, 0, 0);
+        }
+
+        private void HnadleZoom()
+        {
+            // save the current amuont scroll wheel scrolled
+            float scrolInput = Input.GetAxis("Mouse ScrollWheel");
+
+            // clamps the zoom between the min and the max
+            currentZoom = Mathf.Clamp(currentZoom - scrolInput * zoomSpeed, minZoom, maxZoom);
+
+            // sets the target position towards each snap point, depending on the zoom
+            Vector3 targetPosition = Vector3.Lerp(firstPersonSnap.position, thirdPersonSnap.position, currentZoom / maxZoom);
+
+            // sets the position to slowly move towards the target potition with lerping over time
+            _camera.position = Vector3.Lerp(_camera.position, targetPosition, Time.deltaTime * transitionSpeed);
+
+            // Chnages the field of view depending on how zoomed in you are
+            _camera.GetComponent<Camera>().fieldOfView = Mathf.Lerp(40, 80, currentZoom / maxZoom);
         }
     }
 }
