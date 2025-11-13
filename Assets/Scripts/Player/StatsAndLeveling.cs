@@ -36,7 +36,7 @@ public class StatsAndLeveling : MonoBehaviour
 
         if (XPGain)
         {
-            XPUP();
+            XPCurrent++;
         }
 
         healthBar.fillAmount = Mathf.Clamp01(playerHealthCurrent / playerHealthMax);
@@ -55,9 +55,5 @@ public class StatsAndLeveling : MonoBehaviour
         {
             XPGain = false;
         }
-    }
-    private void XPUP()
-    {
-        XPCurrent++;
     }
 }
