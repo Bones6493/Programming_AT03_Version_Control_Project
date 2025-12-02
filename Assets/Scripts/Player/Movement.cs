@@ -11,7 +11,7 @@ namespace Player
     public class Movement : MonoBehaviour
     {
         [Header("Moving Player Direction")]
-        // Stores the player's movement direction by using a Vector 3 (X, Y, Z)
+        // Stores the player's 3D movement by using a Vector 3 (X, Y, Z)
         [SerializeField] Vector3 _movementDirection = Vector3.zero;
         // A reference to the Charcter controller component, which handles player movement
         [SerializeField] CharacterController _characterController;
