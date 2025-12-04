@@ -30,49 +30,47 @@ public class PlayerHandler : MonoBehaviour
     /// <summary>
     /// Applies damage to the player and updates the player health. Disables healing for a bit.
     /// </summary>
-    /// <param name="damageValue">The amount of damage to apply to the player.</param>
+    /// <param name="damageValue">The amount of damage that will be applied to the player.</param>
     public void DamagePlayer(float damageValue)
     {
-        // Reset healing timer and disable healing
+        // Reset healing timer and stop healing
         timerValue = 0;
         canHeal = false;
 
-        // Subtract damage from the player's current health
+        // Subtract damage from the player's current health to calculate the damage taken by the player
         playerData.health.currentValue -= damageValue;
     }
 
-    #region Private Methods
-
     /// <summary>
-    /// Gradually heals the player over time if healing is allowed and the player's health is not full.
+    /// Quickly heals the player over time if player can heal and the player's health is not full.
     /// </summary>
     void HealOverTime()
     {
-        // Check if the player is allowed to regenerate health
+        // Checks if the player can heal 
         if (canHeal)
         {
-            // Check if current health is less than the maximum allowed and the player is alive
+            // Check if current health is less than the max health and if the player health is above zero
 
             if (playerData.health.currentValue < playerData.health.maxValue && playerData.health.currentValue > 0)
             {
-                // Increase health over time based on the health regen value
+                // regenerate player health over time dependiong on the player health regeneration value
                 playerData.health.currentValue += playerData.health.value * Time.deltaTime;
             }
         }
     }
 
     /// <summary>
-    /// Tracks the time since the player last took damage and re-enables healing after a delay.
+    /// Tracks the time from when the player last took damage to when they can regenerate health lost
     /// </summary>
     void Timer()
     {
-        // Check if health regeneration is currently disabled
+        // Checks if player cannot regenerate health
         if (!canHeal)
         {
-            // Increment the regen timer by the time passed since the last frame
+            // Make the regen timer count up by the time passed since the last frame
             timerValue += Time.deltaTime;
 
-            // If the regen timer has exceeded 1.5 seconds, allow health regeneration
+            // If the regen timer has counted past 1.5 seconds, allow the player to regenerate health
             if (timerValue >= 1.5f)
             {
                 // Enable health regeneration
@@ -85,12 +83,15 @@ public class PlayerHandler : MonoBehaviour
 
     void Respawn()
     {
+        // if player health is above 0 return 
         if (playerData.health.currentValue > 0)
         {
             return;
         }
         else
         {
+            // disable the character controller and teleport the player back to the spawn point
+            //with max health and stamina and then set healing to true and renable the character controller
             playerObject.GetComponent<CharacterController>().enabled = false;
             playerObject.transform.position = spawnPoint.position;
             playerData.health.currentValue = playerData.health.maxValue;
@@ -118,13 +119,13 @@ public class PlayerHandler : MonoBehaviour
     {
         if (other.tag == "Heal")
         {
-            // Double the healing rate while inside the Heal trigger
+            // Double the player health regen rate while the Heal trigger is acivated
             playerData.health.value *= 2;
         }
-        // Check if the other object the player collided with has the tag "SpawnPoint"
+        // Check if the other object the player collided with has the "SpawnPoint" tag
         if (other.tag == "SpawnPoint")
         {
-            // Update the player's spawn point to the exited collider's transform
+            // Update the player's spawn point to the exited collider's transform that has the "SpawnPoint" tag
             spawnPoint = other.transform;
         }
     }
@@ -156,12 +157,12 @@ public class PlayerHandler : MonoBehaviour
         // Check if the object being hit has the tag "Damage" and if it hasn't already been processed
         if (hit.gameObject.CompareTag("Damage") && !hitTags.Contains(hit.gameObject.tag))
         {
-            // Log a message indicating that damage was hit
+            // Log a message indicating that damage was delt to the player
             Debug.Log("Hit damage");
 
             // Apply damage to the player by calling the DamagePlayer method with a damage value of 10
             DamagePlayer(10);
-            // Add the "Damage" tag to the hitTags list to prevent repeated damage from the same object
+            // Add the "Damage" tag to the hitTags list to prevent repeated damage from the same object within the same frame 
             hitTags.Add(hit.gameObject.tag);
         }
     }
@@ -211,6 +212,4 @@ public class PlayerHandler : MonoBehaviour
         // Call the Timer method to update the regeneration timer and check if regeneration is allowed
         Timer();
     }
-
-    #endregion
 }
