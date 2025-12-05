@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,7 +35,7 @@ public class StatsAndLeveling : MonoBehaviour
 
         if (XPGain)
         {
-            XPCurrent++;
+            XPCurrent+=0.8f;
         }
 
         healthBar.fillAmount = Mathf.Clamp01(playerHealthCurrent / playerHealthMax);
