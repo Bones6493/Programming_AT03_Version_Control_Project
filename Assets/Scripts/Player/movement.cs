@@ -11,25 +11,25 @@ namespace Player
     public class Movement : MonoBehaviour
     {
         [Header("Moving Player Direction")]
-        // Stores the player's movement direction as a 3D vector (X, Y, Z)
+        // Stores the player's movement direction as a vector 3 (X, Y, Z)
         [SerializeField] Vector3 _movementDirection = Vector3.zero;
-        // A reference to the Charcter controller component, which handles player movement
+        // A reference to the Charcter controller component, which handles player movement while also making it visable in the inspector
         [SerializeField] CharacterController _characterController;
         [Header("Speed That The Player Moves")]
-        // Stores the current movement speed of the player
+        // Stores the current movement speed of the player while also making it visable in the inspector
         [SerializeField] float _movementSpeed;
-        // Different movement speed for walking, springing, crouching
+        // Different movement speed for walking, springing, crouching thats also been made visable inside the inspector
         [SerializeField] float _walkSpeed = 5, _sprintSpeed = 10, _crouchSpeed = 2.5f;
-        // Speed applied when the player jumps
+        // Speed applied when the player jumps is also visable in the inspector
         [SerializeField] float _jumpSpeed = 10;
-        // Strength of the gravity aplied to the player to keep them grounded
+        // Strength of the gravity applied to the player to pull them back down when they jump, it is also visable in the inspector
         [SerializeField] float _gravity = 20;
-        // Double jump check
+        // Double jump check to make sure you only double jump while mid air
         [SerializeField] bool _doubleJump = true;
-        // Double jump time delay
+        // created Double jump time delay to prevent rapid fast double jump spamming
         [SerializeField] float _doubleJumpDelay;
-        // Stamina data set up
-        
+        // Stamina data set up 
+
         void Start()
         {
             _characterController = this.GetComponent<CharacterController>();
@@ -37,19 +37,19 @@ namespace Player
 
         void Update()
         {
-            // adding a delay to the double jump, so they don't happen at the same time
+            // adding a delay script to the double jump delay, so they don't happen at the same time
             if (_doubleJumpDelay > 0)
             {
                 _doubleJumpDelay = -Time.deltaTime;
             }
-            // IF player on the ground
+            // IF player is on the ground
             if (_characterController.isGrounded)
             {
-               // _doubleJump = false;
-                // IF input shift AND has stamina
+                // _doubleJump = false;
+                // if input shift and stamina bar is not empty
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    // Speed = run speed
+                    // Speed = sprint speed
                     _movementSpeed = _sprintSpeed;
                 }
                 //  ELSE IF input ctrl
@@ -58,7 +58,7 @@ namespace Player
                     // Speed = crouch speed
                     _movementSpeed = _crouchSpeed;
                 }
-                // ELSE
+                // ELSE in case you do not press those buttons or stamina bar is empty while moving
                 else
                 {
                     // Speed = walk speed
@@ -73,28 +73,28 @@ namespace Player
                 // SET direction from local to world
                 _movementDirection = transform.TransformDirection(_movementDirection);
 
-                // if input space
+                // if pressed space
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    // Set movent to jump
+                    // Set movement to jump
                     _movementDirection.y = _jumpSpeed;
                     _doubleJump = true;
                     _doubleJumpDelay = 1;
 
                 }
                 //ENDIF
-             }
-             else if ((Input.GetKeyDown(KeyCode.Space)) && _doubleJump && _doubleJumpDelay <= 0)
+            }
+            else if ((Input.GetKeyDown(KeyCode.Space)) && _doubleJump && _doubleJumpDelay <= 0)
             {
-                // Set movent to jump
+                // Set movement to jump
                 _movementDirection.y = _jumpSpeed;
                 _doubleJump = false;
             }
             //ENDIF
 
-            // SET gravity
+            // Set gravity
             _movementDirection.y -= _gravity * Time.deltaTime;
-            _characterController.Move(_movementDirection *  Time.deltaTime);
+            _characterController.Move(_movementDirection * Time.deltaTime);
         }
     }
 
