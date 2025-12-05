@@ -286,6 +286,7 @@ GameObject:
   - component: {fileID: 1440528135}
   - component: {fileID: 1440528140}
   - component: {fileID: 1440528141}
+  - component: {fileID: 1440528142}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -459,6 +460,52 @@ MonoBehaviour:
   firstPersonSnap: {fileID: 1777644116}
   thirdPersonSnap: {fileID: 364984267}
   thirdPersonParent: {fileID: 1449299460}
+--- !u!114 &1440528142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440528132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8b53730302255a4f9b2f718ab311f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData:
+    name: 
+    health:
+      currentValue: 0
+      maxValue: 0
+      value: 0
+    stamina:
+      currentValue: 0
+      maxValue: 0
+      value: 0
+    level: 0
+    experience:
+      currentValue: 0
+      maxValue: 0
+      value: 0
+    stats:
+    - name: Strength
+      statValue: 12
+      value: 0
+    - name: Dexterity
+      statValue: 14
+      value: 0
+    - name: Constitution
+      statValue: 13
+      value: 0
+    - name: Intelligence
+      statValue: 10
+      value: 0
+    - name: Wisdom
+      statValue: 11
+      value: 0
+    - name: Charisma
+      statValue: 8
+      value: 0
 --- !u!1 &1449299459
 GameObject:
   m_ObjectHideFlags: 0
