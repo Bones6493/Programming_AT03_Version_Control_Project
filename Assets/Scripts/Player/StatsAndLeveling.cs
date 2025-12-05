@@ -35,11 +35,7 @@ public class StatsAndLeveling : MonoBehaviour
 
         if (XPGain)
         {
-<<<<<<< Updated upstream
             XPCurrent+=0.8f;
-=======
-            XPCurrent++;
->>>>>>> Stashed changes
         }
 
         healthBar.fillAmount = Mathf.Clamp01(playerHealthCurrent / playerHealthMax);
